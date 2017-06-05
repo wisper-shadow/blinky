@@ -1,0 +1,1 @@
+"./blinky.obj" "./startup_ccs.obj" "./GPIO_Config/GPIO_Config.obj" "./Timer_Config/Timer_Config.obj" "./UART_Config/UART_Config.obj" "./WS2812/WS2812.obj" "./utils/uartstdio.obj" "../blinky_ccs.cmd" -llibc.a -l"C:/ti/TivaWare_C_Series-2.1.2.111/driverlib/ccs/Debug/driverlib.lib" -l"C:/ti/TivaWare_C_Series-2.1.2.111/driverlib/ccs/Debug/driverlib.lib" 
