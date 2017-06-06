@@ -1,7 +1,7 @@
 /*
  * UART_Config.h
  *
- *  Created on: 2017ï¿½ï¿½5ï¿½ï¿½31ï¿½ï¿½
+ *  Created on: 2017Äê5ÔÂ31ÈÕ
  *      Author: Arthur
  */
 
@@ -27,5 +27,6 @@
 
 void ConfigureUART0(void);
 void ConfigureUART1(void);
+void ConfigureUART2(void);
 
 #endif /* UART_CONFIG_UART_CONFIG_H_ */

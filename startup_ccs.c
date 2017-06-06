@@ -47,6 +47,8 @@ extern void _c_int00(void);
 extern void GPIODIntHandler(void);
 extern void UART0IntHandler(void);
 extern void UART1IntHandler(void);
+extern void UART2IntHandler(void);
+
 //*****************************************************************************
 //
 // Linker variable that marks the top of the stack.
@@ -114,7 +116,7 @@ void (* const g_pfnVectors[])(void) =
 	GPIODIntHandler,                      // GPIO Port F
     IntDefaultHandler,                      // GPIO Port G
     IntDefaultHandler,                      // GPIO Port H
-    IntDefaultHandler,                      // UART2 Rx and Tx
+    UART2IntHandler,                      // UART2 Rx and Tx
     IntDefaultHandler,                      // SSI1 Rx and Tx
     IntDefaultHandler,                      // Timer 3 subtimer A
     IntDefaultHandler,                      // Timer 3 subtimer B

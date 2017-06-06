@@ -68,6 +68,7 @@ int main(void)
 	ConfigureGPIOD();
 	ConfigureUART0();
 	ConfigureUART1();
+//	ConfigureUART2();
 	intpriorityConfigure();
 //	Timer0A_Init();
 
@@ -81,12 +82,10 @@ int main(void)
 		switch(LEDCtrl_Buffer[2])
 		{
 			case 0x00:
-			
 			for(i=0;i<24;i++)
 				for (j=0;j<3;j++)
-					Send_Hex(RGB_Reset[j]);
+					Send_Hex(0x00);
 			Send_Reset();
-			SysCtlDelay(SysCtlClockGet()/400);
 			break;
 			
 			case 0x01:
@@ -97,7 +96,6 @@ int main(void)
 			if(k == 24)
 				k=0;
 			Send_Reset();
-			SysCtlDelay(SysCtlClockGet()/400);
 			SysCtlDelay(SysCtlClockGet()/72);
 			break;
 			
@@ -124,7 +122,6 @@ int main(void)
 				RGB_flag = 0;
 				RGB_flag2 = 0;
 			}
-			SysCtlDelay(SysCtlClockGet()/400);
 			break;
 			
 			case 0x03:
@@ -150,7 +147,6 @@ int main(void)
 				RGB_flag = 0;
 				RGB_flag2 = 0;
 			}
-			SysCtlDelay(SysCtlClockGet()/400);
 			break;
 			
 			case 0x04:
@@ -176,7 +172,6 @@ int main(void)
 				RGB_flag = 0;
 				RGB_flag2 = 0;
 			}
-			SysCtlDelay(SysCtlClockGet()/400);
 			break;
 			
 			default:
@@ -256,6 +251,40 @@ void UART1IntHandler(void)
     while(UARTCharsAvail(UART1_BASE))
     {
         rx_buffer = UARTCharGetNonBlocking(UART1_BASE);
+        if(rx_buffer == MSG_STX)
+        {
+            LEDCtrl_flag = 0;
+            start_receive_LEDCtrl = 1;
+        }
+        if(start_receive_LEDCtrl == 1)
+        {
+            Rx_Buffer_LEDCtrl[LEDCtrl_flag++] = rx_buffer;
+            if(LEDCtrl_flag == MSG_LED_LENGTH && Rx_Buffer_LEDCtrl[1] == MSG_LED_ID)
+            {
+                memcpy(LEDCtrl_Buffer,Rx_Buffer_LEDCtrl,MSG_LED_LENGTH);
+                is_LEDCtrl = true;
+            }
+            if(LEDCtrl_flag >= MSG_LED_LENGTH)
+            {
+                LEDCtrl_flag = 0;
+                start_receive_LEDCtrl = 0;
+                memset(Rx_Buffer_LEDCtrl,0,5);
+            }
+        }
+    }
+}
+
+void UART2IntHandler(void)
+{
+    uint32_t ui32Status;
+    ui32Status = UARTIntStatus(UART2_BASE, true);
+    UARTIntClear(UART2_BASE, ui32Status);
+
+    RGB_flag2 = 0;
+
+    while(UARTCharsAvail(UART2_BASE))
+    {
+        rx_buffer = UARTCharGetNonBlocking(UART2_BASE);
         if(rx_buffer == MSG_STX)
         {
             LEDCtrl_flag = 0;
